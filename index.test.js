@@ -7,16 +7,9 @@ test('new object', () => {
   expect(rre).toBeDefined();
 });
 
-//// Simple test
-//// TODO: remove when regular tests done
-//const ee = new RqrsEmitter();
-//console.log(ee.handler);
-
-//(async function() {
-  //ee.handler('test', async function(r) {
-    //console.log('Handler:', r);
-    //return 'ok';
-  //});
-  //const res = await ee.request('test', { a: 1 });
-  //console.log(res);
-//})();
+test('successful call', async () => {
+  const rre = new RqrsEmitter();
+  rre.handler('test', async req => 'ok' );
+  const res = await rre.request('test', { a: 1 });
+  expect(res).toBe('ok');
+});
