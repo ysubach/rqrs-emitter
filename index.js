@@ -34,7 +34,11 @@ RqrsEmitter.prototype.request = async function(event, data) {
     const reqId = rndstr() + rndstr();
     const respEvent = reqId + rqrsEvent(event);
     this.once(respEvent, function(res) {
-      resolve(res);
+      if (!res.isError) {
+        resolve(res.data);
+      } else {
+        reject(res.data);
+      }
     });
     const r = this.emit(rqrsEvent(event), { 
       id: reqId, 
@@ -58,8 +62,18 @@ RqrsEmitter.prototype.addRequestHandler = function(event, handlerFn) {
     throw new Error(`handler already exists for [${event}]`);
   }
   const r = this.on(rqrsEvent(event), async function(req) {
-    const res = await handlerFn(req.data);
-    this.emit(req.id + rqrsEvent(event), res);
+    try {
+      const res = await handlerFn(req.data);
+      this.emit(req.id + rqrsEvent(event), {
+        data: res,
+        isError: false
+      });
+    } catch (e) {
+      this.emit(req.id + rqrsEvent(event), {
+        data: e,
+        isError: true
+      });
+    }
   });
   this.handlersMap[event] = true;
   return r;

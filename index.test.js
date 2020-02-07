@@ -58,3 +58,16 @@ test('handler already exists error', async () => {
     expect(e.toString()).toBe('Error: handler already exists for [test]');
   }
 });
+
+test('handler throwing exception', async () => {
+  const rre = new RqrsEmitter();
+  rre.handler('test', async () => {
+    throw new Error('error in handler');
+  });
+  try {
+    await rre.request('test');
+    expect(null).toBe('exception not thrown');
+  } catch (e) {
+    expect(e.toString()).toBe('Error: error in handler');
+  }
+});
