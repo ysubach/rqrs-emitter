@@ -124,6 +124,11 @@ type OrangeEvent = {
 
 ### Initialization
 
+Import RqrsEmitter:
+```
+import RqrsEmitter from 'rqrs-emitter';
+```
+
 Use one or more event types to instantiate new RqrsEmitter object. Examples:
 ```
 const rre = new RqrsEmitter<AppleEvent>();
