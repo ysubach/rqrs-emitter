@@ -102,7 +102,7 @@ incorporate following parts:
 - `response` - defines response type
 
 Example:
-```
+```typescript
 type AppleEvent = {
   type: 'apple',
   request: number,
@@ -114,7 +114,7 @@ In case you need event only to be used with `emit` method, which means no
 response is expected, define response type as `never`.
 
 Example:
-```
+```typescript
 type OrangeEvent = {
   type: 'orange',
   request: string,
@@ -125,12 +125,12 @@ type OrangeEvent = {
 ### Initialization
 
 Import RqrsEmitter:
-```
+```typescript
 import RqrsEmitter from 'rqrs-emitter';
 ```
 
 Use one or more event types to instantiate new RqrsEmitter object. Examples:
-```
+```typescript
 const rre = new RqrsEmitter<AppleEvent>();
 // OR
 const rre = new RqrsEmitter<AppleEvent|OrangeEvent>();
@@ -145,14 +145,14 @@ Specify event type for each request/response method or standard event emitter
 method.
 
 Example:
-```
+```typescript
 rre.handler<AppleEvent>('apple', (req: number) => 'ok');
 const resp = await rre.request<AppleEvent>('apple', 1);
 // resp equals 'ok'
 ```
 
 Example without response:
-```
+```typescript
 rre.on<OrangeEvent>('orange', (req: string) => { /* do something */ });
 rre.emit<OrangeEvent>('orange', 'hello');
 ```
